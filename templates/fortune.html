@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>🔮 今日の運勢占い</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f0ff;
+      color: #4b2b6f;
+      margin: 0;
+      padding: 30px 15px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #8436a8;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(160, 120, 200, 0.2);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #a96ce4;
+      color: white;
+      font-size: 16px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 30px;
+      background: #f4e9ff;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: pre-wrap;
+      text-align: left;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    #loadingText {
+      margin-top: 10px;
+      color: #8436a8;
+      font-weight: bold;
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .result {
+        font-size: 15px;
+        padding: 15px;
+      }
+    }
+  </style>
+
+  <script>
+    function showLoading() {
+      const btn = document.getElementById("submitBtn");
+      const loading = document.getElementById("loadingText");
+      if (btn && loading) {
+        btn.disabled = true;
+        btn.innerText = "🔮 占い中...";
+        loading.style.display = "block";
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>🔮 あなたの今日の運勢 🔮</h1>
+
+  <form method="POST" action="/fortune" onsubmit="showLoading()">
+    <input type="text" name="name" placeholder="お名前（ニックネームOK）" required>
+    <input type="text" name="birthdate" placeholder="生年月日（例：1990-03-07）" required>
+    <select name="genre" required>
+      <option value="">ジャンルを選択</option>
+      <option value="恋愛運">恋愛運</option>
+      <option value="金運">金運</option>
+      <option value="仕事運">仕事運</option>
+      <option value="全体運">全体運</option>
+      <option value="健康運">健康運</option>
+      <option value="対人運">対人運</option>
+    </select>
+    <button type="submit" id="submitBtn">🔮 占う</button>
+  </form>
+
+  <div id="loadingText" style="display: none;">
+    🔮 占い中です…少しお待ちください…
+  </div>
+
+  {% if result %}
+    <div class="result">
+      {{ result|safe }}
+    </div>
+  {% endif %}
+</body>
+</html>
