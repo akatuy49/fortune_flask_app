@@ -1,13 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import openai
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # セッション用の秘密鍵
 
-import os
 client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# 日本時間を取得する関数
+def get_japan_time():
+    return datetime.utcnow() + timedelta(hours=9)
 
 lucky_items = ["🔮 水晶玉", "🌙 月のペンダント", "✨ 星型チャーム", "🧿 お守り", "📿 パワーストーン", "🌟 光る羽根", "💫 魔法の本"]
 
@@ -20,7 +24,7 @@ destiny_quotes = [
 ]
 
 def get_fortune(name, birthdate, genre):
-    today = datetime.now().strftime("%Y年%m月%d日")
+    today = get_japan_time().strftime("%Y年%m月%d日")
     prompt = f"""
 あなたはプロの占い師です。
 対象者は「{name}さん」、生年月日は「{birthdate}」です。
@@ -72,7 +76,7 @@ def fortune():
     item = random.choice(lucky_items)
     quote = random.choice(destiny_quotes)
 
-    today = datetime.now().strftime("%Y年%m月%d日")
+    today = get_japan_time().strftime("%Y年%m月%d日")
     formatted = f"<div style='text-align: center;'>"
     formatted += f"<strong>{name}さんの結果はこちら👇</strong><br><br>"
     formatted += f"【🔮{today}の{genre}🔮】<br><br>"
